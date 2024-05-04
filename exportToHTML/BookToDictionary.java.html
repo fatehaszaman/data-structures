@@ -1,0 +1,96 @@
+<html>
+<head>
+<title>BookToDictionary.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #629755; font-style: italic;}
+.s3 { color: #629755; font-weight: bold; font-style: italic;}
+.s4 { color: #808080;}
+.s5 { color: #6897bb;}
+.s6 { color: #6a8759;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+BookToDictionary.java</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">java.io.IOException</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">java.net.URL</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">java.util.Scanner</span><span class="s0">;</span>
+
+<span class="s0">public class </span><span class="s1">BookToDictionary {</span>
+
+    <span class="s2">/**</span>
+     <span class="s2">* Produces a Scanner connected to a text file accessible via the web.</span>
+     <span class="s2">*</span>
+     <span class="s2">* The method expects a link to a text file. When accessing material from</span>
+     <span class="s2">* Project Gutenberg it is import to use the plain text version of a book.</span>
+     <span class="s2">*</span>
+     <span class="s2">* DO NOT MODIFY THIS METHOD.</span>
+     <span class="s2">*</span>
+     <span class="s2">* </span><span class="s3">@param </span><span class="s2">link String with URL to text file.</span>
+     <span class="s2">* </span><span class="s3">@return </span><span class="s2">a Scanner for the file or null if connection cannot be made.</span>
+     <span class="s2">*/</span>
+    <span class="s0">public final static </span><span class="s1">Scanner browseTextFile (String link) {</span>
+        <span class="s4">// Declare the return variable</span>
+        <span class="s1">Scanner fileOnline</span><span class="s0">;</span>
+        <span class="s4">// Use try/catch to prevent the program from crashing.</span>
+        <span class="s0">try </span><span class="s1">{</span>
+            <span class="s4">// Create a URL object from the link provided</span>
+            <span class="s1">URL url = </span><span class="s0">new </span><span class="s1">URL(link)</span><span class="s0">;</span>
+            <span class="s4">// Turn the URL into a Scanner</span>
+            <span class="s1">fileOnline = </span><span class="s0">new </span><span class="s1">Scanner(url.openStream())</span><span class="s0">;</span>
+        <span class="s1">} </span><span class="s0">catch </span><span class="s1">(IOException e) {</span>
+            <span class="s4">// If something goes wrong, prepare to return null Scanner.</span>
+            <span class="s1">fileOnline = </span><span class="s0">null;</span>
+        <span class="s1">}</span>
+        <span class="s0">return </span><span class="s1">fileOnline</span><span class="s0">;</span>
+    <span class="s1">}  </span><span class="s4">// method browseTextFile</span>
+
+    <span class="s2">/**</span>
+     <span class="s2">* Scans the contents of the scanner object and adds them</span>
+     <span class="s2">* to a dynamic array that it then returns.</span>
+     <span class="s2">*</span>
+     <span class="s2">* </span><span class="s3">@param </span><span class="s2">textToScan Scanner with contents to parse</span>
+     <span class="s2">* </span><span class="s3">@return </span><span class="s2">DynamicArray with the words from the text.</span>
+     <span class="s2">*/</span>
+    <span class="s0">public static </span><span class="s1">DynamicBookArray bookToArray(Scanner textToScan) {</span>
+        <span class="s4">// Declare the object as null for now, in case scanner is also null.</span>
+        <span class="s1">DynamicBookArray words = </span><span class="s0">null;</span>
+
+        <span class="s0">if </span><span class="s1">(textToScan != </span><span class="s0">null</span><span class="s1">) {</span>
+            <span class="s4">// Scanner is legit, initialize object words to a new dynamic array.</span>
+            <span class="s1">words = </span><span class="s0">new </span><span class="s1">DynamicBookArray()</span><span class="s0">;</span>
+
+            <span class="s4">// Scan the text.</span>
+            <span class="s0">while </span><span class="s1">(textToScan.hasNext()) {</span>
+                <span class="s4">// Use scanner to get the next String.</span>
+                <span class="s1">String word = textToScan.next()</span><span class="s0">;</span>
+
+                <span class="s4">// Checking if there is any words left to add.</span>
+                <span class="s0">if </span><span class="s1">(word.length() &gt; </span><span class="s5">0 </span><span class="s1">&amp;&amp; !words.contains(word))</span>
+                    <span class="s1">words.add(word)</span><span class="s0">;</span>
+            <span class="s1">}</span>
+        <span class="s1">}</span>
+        <span class="s0">return </span><span class="s1">words</span><span class="s0">;</span>
+    <span class="s1">}  </span><span class="s4">// method bookToArray</span>
+
+
+    <span class="s2">/** Use main() to call other methods; don't put all your code in main. */</span>
+    <span class="s0">public static void </span><span class="s1">main(String[] args) {</span>
+        <span class="s4">// Link to A Tale of Two Cities</span>
+        <span class="s1">String book = </span><span class="s6">&quot;https://www.gutenberg.org/files/98/98-0.txt&quot;</span><span class="s0">;</span>
+        <span class="s1">Scanner s = browseTextFile(book)</span><span class="s0">;</span>
+        <span class="s4">// Use the scanner to pull the book's words into a dynamic array.</span>
+        <span class="s1">DynamicBookArray w = bookToArray(s)</span><span class="s0">;</span>
+        <span class="s4">// Print some basic information about the dynamic array object</span>
+        <span class="s1">System.out.println(bookToArray(s))</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+<span class="s1">}  </span><span class="s4">// class BookToDictionary</span></pre>
+</body>
+</html>
